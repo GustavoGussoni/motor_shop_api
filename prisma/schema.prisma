@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Announcement {
+  id            String         @id @default(uuid())
+  name_car      String         @db.VarChar(20)
+  brand         String         @db.VarChar(20)
+  year          String         @db.VarChar(4)
+  fuel          Int            @db.Integer()
+  kilometers    Int            @db.Integer()
+  color         String         @db.VarChar(20)
+  price_fipe    Int            @db.Integer()
+  price         Int            @db.Integer()
+  description   String         @db.Text()
+  cover_image   String         @db.Text()
+  image_gallery ImageGallery[]
+
+  @@map("announcements")
+}
+
+model ImageGallery {
+  id    String @id @default(uuid())
+  image String @db.Text()
+
+  Announcement   Announcement @relation(fields: [announcementId], references: [id])
+  announcementId String
+
+  @@map("images_gallery")
+}
