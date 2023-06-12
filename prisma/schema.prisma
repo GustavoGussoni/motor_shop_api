@@ -36,3 +36,20 @@ model ImageGallery {
 
   @@map("images_gallery")
 }
+
+model User {
+    id            String         @id @default(uuid())
+    name          String         @db.VarChar(150)
+    email         String         @db.VarChar(254)
+    cpf           String         @db.VarChar(12)
+    cellphone     String         @db.VarChar(11)
+    birthdate     DateTime       @db.Date()
+    description   String         @db.VarChar()
+    is_admin      Boolean        @db.Boolean() @default(false)
+    is_advertiser Boolean        @db.Boolean() @default(false)
+    password      String         @db.VarChar(128)
+    addressId     String         @db.VarChar()
+
+    @@map("users")
+}
+
