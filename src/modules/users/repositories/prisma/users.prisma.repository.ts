@@ -10,16 +10,21 @@ import { plainToInstance } from 'class-transformer';
 export class UsersPrismaRepository implements UserRepository {
   constructor(private prisma: PrismaService) {}
   async create(data: CreateUserDto): Promise<User> {
-    const user = new User();    
+    const user = new User();
     Object.assign(user, {
-        ...data,
-        birthdate: new Date(data.birthdate),
+      ...data,
+      birthdate: new Date(data.birthdate),
     });
     const newUser = await this.prisma.user.create({
       data: { ...user },
     });
-    console.log(newUser)
+    console.log(newUser);
     return plainToInstance(User, newUser);
+  }
+  async findByEmail(email): Promise<User> {
+    const user = await this.prisma.user.findUnique({ where: email });
+
+    return user;
   }
   findAll(): User[] | Promise<User[]> {
     throw new Error('Method not implemented.');

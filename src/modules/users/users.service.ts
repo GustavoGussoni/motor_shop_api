@@ -10,6 +10,10 @@ export class UsersService {
     return this.userRepository.create(createUserDto);
   }
 
+  findByEmail(email: string) {
+    return this.userRepository.findByEmail(email);
+  }
+
   findAll() {
     return this.userRepository.findAll();
   }

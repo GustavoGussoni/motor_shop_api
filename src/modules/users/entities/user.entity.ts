@@ -7,7 +7,7 @@ export class User {
   email: string;
   cpf: string;
   cellphone: string;
-  birthdate: string;
+  birthdate: Date;
   description: string;
   is_admin: boolean;
   is_advertiser: boolean;
