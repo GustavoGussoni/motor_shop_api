@@ -55,4 +55,8 @@ export class CreateAnnouncementDto {
   @IsString()
   @IsNotEmpty()
   cover_image: string;
+
+  @IsString()
+  @IsNotEmpty()
+  userId: string
 }
