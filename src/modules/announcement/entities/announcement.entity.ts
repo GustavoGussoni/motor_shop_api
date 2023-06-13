@@ -13,6 +13,7 @@ export class Announcement {
   price: number;
   description: string;
   cover_image: string;
+  readonly userId: string;
 
   constructor() {
     this.id = randomUUID();

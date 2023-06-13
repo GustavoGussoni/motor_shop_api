@@ -53,5 +53,5 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   @IsOptional()
-  addressId: string;
+  address: {};
 }
