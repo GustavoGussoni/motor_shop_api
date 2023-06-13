@@ -15,6 +15,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { OwnerGuard } from '../auth/owner.guard';
 
 @Controller('users')
 export class UsersController {
@@ -33,9 +34,10 @@ export class UsersController {
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
+  @UseGuards(JwtAuthGuard, OwnerGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+    return '';
   }
   @UseInterceptors(ClassSerializerInterceptor)
   @Patch(':id')
