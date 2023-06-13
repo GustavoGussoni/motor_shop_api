@@ -4,6 +4,7 @@ import {
   IsBoolean,
   IsDate,
   IsNotEmpty,
+  IsObject,
   IsOptional,
   IsString,
   MinLength,
@@ -35,10 +36,12 @@ export class CreateUserDto {
   description: string;
 
   @IsBoolean()
+  @IsOptional()
   @IsNotEmpty()
   is_admin: boolean;
 
   @IsBoolean()
+  @IsOptional()
   @IsNotEmpty()
   is_advertiser: boolean;
 
@@ -50,8 +53,15 @@ export class CreateUserDto {
   })
   password: string;
 
-  @IsString()
+  @IsObject()
   @IsNotEmpty()
   @IsOptional()
-  address: {};
+  address: {
+    cep: string;
+    state: string;
+    city: string;
+    street: string;
+    number: number;
+    addOn: string;
+  };
 }

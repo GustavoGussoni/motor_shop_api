@@ -43,7 +43,7 @@ model ImageGallery {
 model User {
   id            String         @id @default(uuid())
   name          String         @db.VarChar(150)
-  email         String         @db.VarChar(254)
+  email         String         @db.VarChar(254) @unique
   cpf           String         @db.VarChar(12)
   cellphone     String         @db.VarChar(11)
   birthdate     DateTime       @db.Date() 
