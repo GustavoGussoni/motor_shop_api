@@ -2,14 +2,12 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { compare } from 'bcryptjs';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { AnnouncementService } from '../announcement/announcement.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-    private announcementService: AnnouncementService,
   ) {}
 
   async validateUser(email: string, password: string) {
@@ -28,17 +26,17 @@ export class AuthService {
     throw new UnauthorizedException('Invalid email');
   }
 
-  async validateOwner(userId: string, announcementId: string) {
-    const announcement = await this.announcementService.findOne(announcementId);
+  // async validateOwner(userId: string, announcementId: string) {
+  //   const announcement = await this.announcementService.findOne(announcementId);
 
-    console.log(userId, announcement);
+  //   console.log(userId, announcement);
 
-    if (announcement.userId !== userId) {
-      throw new UnauthorizedException({ message: 'Você não é o proprietário' });
-    }
+  //   if (announcement.userId !== userId) {
+  //     throw new UnauthorizedException({ message: 'Você não é o proprietário' });
+  //   }
 
-    return true;
-  }
+  //   return true;
+  // }
 
   async login(email: string) {
     const user = await this.usersService.findByEmail(email);

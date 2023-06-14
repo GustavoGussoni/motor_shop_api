@@ -36,7 +36,7 @@ export class UsersPrismaRepository implements UserRepository {
   }
   async findByEmail(email: string): Promise<User> {
     const user = await this.prisma.user.findFirst({
-      where: { email: email },
+      where: { email: email },include:{announcement:true}
     });
 
     return user;
@@ -44,8 +44,10 @@ export class UsersPrismaRepository implements UserRepository {
   findAll(): User[] | Promise<User[]> {
     throw new Error('Method not implemented.');
   }
-  findOne(id: string): User | Promise<User> {
-    throw new Error('Method not implemented.');
+  async findOne(id: string): Promise<User> {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+
+    return plainToInstance(User, user);
   }
   update(id: string, data: UpdateUserDto): User | Promise<User> {
     throw new Error('Method not implemented.');

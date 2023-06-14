@@ -6,18 +6,27 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Request,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { AnnouncementService } from './announcement.service';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { OwnerGuard } from '../../guards/is-owner.guard';
 
 @Controller('announcement')
 export class AnnouncementController {
   constructor(private readonly announcementService: AnnouncementService) {}
 
   @Post()
-  create(@Body() createAnnouncementDto: CreateAnnouncementDto) {
-    return this.announcementService.create(createAnnouncementDto);
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  create(@Body() createAnnouncementDto: CreateAnnouncementDto, @Request() req) {
+    const userId = req.user.id;
+    return this.announcementService.create(createAnnouncementDto, userId);
   }
 
   @Get()
@@ -26,6 +35,7 @@ export class AnnouncementController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard, OwnerGuard)
   findOne(@Param('id') id: string) {
     return this.announcementService.findOne(id);
   }

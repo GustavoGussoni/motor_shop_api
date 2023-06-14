@@ -9,14 +9,17 @@ import { AnnouncementRepository } from '../announcement.repository';
 @Injectable()
 export class AnnouncementPrismaRepository implements AnnouncementRepository {
   constructor(private prisma: PrismaService) {}
-  async create(data: CreateAnnouncementDto): Promise<Announcement> {
+  async create(
+    data: CreateAnnouncementDto,
+    userId: string,
+  ): Promise<Announcement> {
     const announcement = new Announcement();
     Object.assign(announcement, {
       ...data,
     });
 
     const newAnnouncement = await this.prisma.announcement.create({
-      data: { ...announcement, userId: '1' },
+      data: { ...announcement, userId: userId },
     });
 
     return plainToInstance(Announcement, newAnnouncement);

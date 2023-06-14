@@ -6,10 +6,10 @@ import { AnnouncementRepository } from './repositories/announcement.repository';
 @Injectable()
 export class AnnouncementService {
   constructor(private announcementRepository: AnnouncementRepository) {}
-  async create(createAnnouncementDto: CreateAnnouncementDto) {
-    console.log(createAnnouncementDto);
+  async create(createAnnouncementDto: CreateAnnouncementDto, userId: string) {
     const announcement = await this.announcementRepository.create(
       createAnnouncementDto,
+      userId,
     );
 
     return announcement;
