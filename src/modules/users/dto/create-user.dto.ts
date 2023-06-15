@@ -62,6 +62,6 @@ export class CreateUserDto {
     city: string;
     street: string;
     number: number;
-    addOn: string;
+    addOn?: string;
   };
 }
