@@ -5,6 +5,7 @@ import { CreateAnnouncementDto } from '../../dto/create-announcement.dto';
 import { UpdateAnnouncementDto } from '../../dto/update-announcement.dto';
 import { Announcement } from '../../entities/announcement.entity';
 import { AnnouncementRepository } from '../announcement.repository';
+import { ImageGallery } from 'src/modules/image-gallery/entities/image-gallery.entity';
 
 @Injectable()
 export class AnnouncementPrismaRepository implements AnnouncementRepository {
@@ -13,13 +14,49 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
     data: CreateAnnouncementDto,
     userId: string,
   ): Promise<Announcement> {
+    const {
+      name_car,
+      brand,
+      year,
+      fuel,
+      kilometers,
+      color,
+      price_fipe,
+      price,
+      description,
+      cover_image,
+      is_activate,
+      image_gallery,
+    } = data;
+
     const announcement = new Announcement();
     Object.assign(announcement, {
-      ...data,
+      name_car,
+      brand,
+      year,
+      fuel,
+      kilometers,
+      color,
+      price_fipe,
+      price,
+      description,
+      cover_image,
+      is_activate,
     });
 
     const newAnnouncement = await this.prisma.announcement.create({
-      data: { ...announcement, userId: userId },
+      data: { ...announcement, userId },
+    });
+
+    image_gallery.map(async (imageObj) => {
+      const image = new ImageGallery();
+      Object.assign(image, {
+        ...imageObj,
+      });
+
+      await this.prisma.imageGallery.create({
+        data: { ...image, announcementId: newAnnouncement.id },
+      });
     });
 
     return plainToInstance(Announcement, newAnnouncement);
@@ -36,10 +73,47 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
   }
 
   async update(id: string, data: UpdateAnnouncementDto): Promise<Announcement> {
+    const {
+      name_car,
+      brand,
+      year,
+      fuel,
+      kilometers,
+      color,
+      price_fipe,
+      price,
+      description,
+      cover_image,
+      is_activate,
+      image_gallery,
+    } = data;
     const announcement = await this.prisma.announcement.update({
       where: { id },
-      data: { ...data },
+      data: {
+        name_car,
+        brand,
+        year,
+        fuel,
+        kilometers,
+        color,
+        price_fipe,
+        price,
+        description,
+        cover_image,
+        is_activate,
+      },
     });
+
+    // image_gallery.map(async (imageObj) => {
+    //   const image = new ImageGallery();
+    //   Object.assign(image, {
+    //     ...imageObj,
+    //   });
+
+    //   const newImage = await this.prisma.imageGallery.update({
+    //     data: { ...image, announcementId: newAnnouncement.id },
+    //   });
+    // });
 
     return plainToInstance(Announcement, announcement);
   }

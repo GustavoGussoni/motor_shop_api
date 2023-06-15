@@ -23,8 +23,6 @@ export class OwnerGuard implements CanActivate {
       announcementId,
     );
 
-    console.log(findAnnouncement, userId);
-
     if (findAnnouncement.userId !== userId) {
       throw new UnauthorizedException('Not Owner');
     }

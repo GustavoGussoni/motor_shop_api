@@ -8,14 +8,11 @@ import {
   Delete,
   UseGuards,
   Request,
-  UseInterceptors,
-  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { AnnouncementService } from './announcement.service';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { OwnerGuard } from '../../guards/is-owner.guard';
 
 @Controller('announcement')
 export class AnnouncementController {
@@ -23,7 +20,6 @@ export class AnnouncementController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  @UseInterceptors(ClassSerializerInterceptor)
   create(@Body() createAnnouncementDto: CreateAnnouncementDto, @Request() req) {
     const userId = req.user.id;
     return this.announcementService.create(createAnnouncementDto, userId);
@@ -35,7 +31,7 @@ export class AnnouncementController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard, OwnerGuard)
+  @UseGuards(JwtAuthGuard)
   findOne(@Param('id') id: string) {
     return this.announcementService.findOne(id);
   }
@@ -44,8 +40,13 @@ export class AnnouncementController {
   update(
     @Param('id') id: string,
     @Body() updateAnnouncementDto: UpdateAnnouncementDto,
+    @Request() req,
   ) {
-    return this.announcementService.update(id, updateAnnouncementDto);
+    return this.announcementService.update(
+      id,
+      updateAnnouncementDto,
+      req.user.id,
+    );
   }
 
   @Delete(':id')

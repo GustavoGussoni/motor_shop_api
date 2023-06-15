@@ -28,7 +28,11 @@ export class AnnouncementService {
     return announcement;
   }
 
-  async update(id: string, updateAnnouncementDto: UpdateAnnouncementDto) {
+  async update(
+    id: string,
+    updateAnnouncementDto: UpdateAnnouncementDto,
+    userId: string,
+  ) {
     const announcement = await this.announcementRepository.findOne(id);
     if (!announcement) {
       throw new NotFoundException('Announcement not found');

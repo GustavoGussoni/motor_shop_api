@@ -10,6 +10,7 @@ import {
   UseGuards,
   UseInterceptors,
   ClassSerializerInterceptor,
+  HttpCode,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -26,14 +27,11 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   findAll() {
     return this.usersService.findAll();
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
-  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
@@ -44,8 +42,9 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
+  @HttpCode(204)
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
   }
