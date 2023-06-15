@@ -5,6 +5,7 @@ import { Announcement } from '../entities/announcement.entity';
 export abstract class AnnouncementRepository {
   abstract create(
     data: CreateAnnouncementDto,
+    userId: string,
   ): Promise<Announcement> | Announcement;
   abstract findAll(): Promise<Announcement[]> | Announcement[];
   abstract findOne(id: string): Promise<Announcement> | Announcement;
