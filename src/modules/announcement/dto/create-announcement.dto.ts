@@ -1,3 +1,5 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { ImageGallery } from '@prisma/client';
 import {
   IsString,
   IsNotEmpty,
@@ -5,6 +7,8 @@ import {
   Min,
   IsInt,
   Max,
+  IsArray,
+  IsBoolean,
 } from 'class-validator';
 
 export class CreateAnnouncementDto {
@@ -52,11 +56,15 @@ export class CreateAnnouncementDto {
   @IsNotEmpty()
   description: string;
 
+  @ApiProperty({ default: true })
+  @IsBoolean()
+  is_activate: boolean;
+
   @IsString()
   @IsNotEmpty()
   cover_image: string;
 
-  @IsString()
+  @IsArray()
   @IsNotEmpty()
-  userId: string
+  image_gallery?: ImageGallery[];
 }

@@ -6,10 +6,10 @@ import { AnnouncementRepository } from './repositories/announcement.repository';
 @Injectable()
 export class AnnouncementService {
   constructor(private announcementRepository: AnnouncementRepository) {}
-  async create(createAnnouncementDto: CreateAnnouncementDto) {
-    console.log(createAnnouncementDto);
+  async create(createAnnouncementDto: CreateAnnouncementDto, userId: string) {
     const announcement = await this.announcementRepository.create(
       createAnnouncementDto,
+      userId,
     );
 
     return announcement;
@@ -28,7 +28,11 @@ export class AnnouncementService {
     return announcement;
   }
 
-  async update(id: string, updateAnnouncementDto: UpdateAnnouncementDto) {
+  async update(
+    id: string,
+    updateAnnouncementDto: UpdateAnnouncementDto,
+    userId: string,
+  ) {
     const announcement = await this.announcementRepository.findOne(id);
     if (!announcement) {
       throw new NotFoundException('Announcement not found');

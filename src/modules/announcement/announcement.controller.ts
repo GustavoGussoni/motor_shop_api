@@ -6,18 +6,22 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { AnnouncementService } from './announcement.service';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('announcement')
 export class AnnouncementController {
   constructor(private readonly announcementService: AnnouncementService) {}
 
   @Post()
-  create(@Body() createAnnouncementDto: CreateAnnouncementDto) {
-    return this.announcementService.create(createAnnouncementDto);
+  @UseGuards(JwtAuthGuard)
+  create(@Body() createAnnouncementDto: CreateAnnouncementDto, @Request() req) {
+    return this.announcementService.create(createAnnouncementDto, req.user.id);
   }
 
   @Get()
@@ -34,8 +38,13 @@ export class AnnouncementController {
   update(
     @Param('id') id: string,
     @Body() updateAnnouncementDto: UpdateAnnouncementDto,
+    @Request() req,
   ) {
-    return this.announcementService.update(id, updateAnnouncementDto);
+    return this.announcementService.update(
+      id,
+      updateAnnouncementDto,
+      req.user.id,
+    );
   }
 
   @Delete(':id')
