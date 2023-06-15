@@ -5,9 +5,16 @@ import { AnnouncementModule } from './modules/announcement/announcement.module';
 import { ImageGalleryModule } from './modules/image-gallery/image-gallery.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
+import { GuardModule } from './guards/guard.module';
 
 @Module({
-  imports: [AnnouncementModule, ImageGalleryModule, AuthModule, UsersModule],
+  imports: [
+    AnnouncementModule,
+    ImageGalleryModule,
+    UsersModule,
+    AuthModule,
+    GuardModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

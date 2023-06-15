@@ -9,6 +9,7 @@ import {
   Max,
   IsArray,
   IsBoolean,
+  IsOptional,
 } from 'class-validator';
 
 export class CreateAnnouncementDto {
@@ -65,6 +66,7 @@ export class CreateAnnouncementDto {
   cover_image: string;
 
   @IsArray()
-  @IsNotEmpty()
+  @IsOptional()
+  @ApiProperty({ default: [] })
   image_gallery?: ImageGallery[];
 }

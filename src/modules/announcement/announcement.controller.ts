@@ -21,7 +21,8 @@ export class AnnouncementController {
   @Post()
   @UseGuards(JwtAuthGuard)
   create(@Body() createAnnouncementDto: CreateAnnouncementDto, @Request() req) {
-    return this.announcementService.create(createAnnouncementDto, req.user.id);
+    const userId = req.user.id;
+    return this.announcementService.create(createAnnouncementDto, userId);
   }
 
   @Get()
@@ -30,6 +31,7 @@ export class AnnouncementController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   findOne(@Param('id') id: string) {
     return this.announcementService.findOne(id);
   }
