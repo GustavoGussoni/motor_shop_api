@@ -46,9 +46,10 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
 
     const newAnnouncement = await this.prisma.announcement.create({
       data: { ...announcement, userId },
+      include: { image_gallery: true },
     });
 
-    image_gallery.map(async (imageObj) => {
+    image_gallery?.map(async (imageObj) => {
       const image = new ImageGallery();
       Object.assign(image, {
         ...imageObj,
