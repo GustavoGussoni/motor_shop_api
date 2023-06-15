@@ -18,17 +18,6 @@ export class User {
   @Exclude()
   readonly addressId: string;
 
-  // address: {
-  //   readonly id: string;
-  //   cep: string;
-  //   state: string;
-  //   city: string;
-  //   street: string;
-  //   number: number;
-  //   addOn: string;
-
-  // };
-
   constructor() {
     this.id = randomUUID();
   }
@@ -41,7 +30,7 @@ export class Address {
   city: string;
   street: string;
   number: number;
-  addOn: string;
+  addOn?: string;
 
   constructor() {
     this.id = randomUUID();
