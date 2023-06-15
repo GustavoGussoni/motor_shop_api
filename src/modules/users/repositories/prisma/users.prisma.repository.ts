@@ -42,8 +42,9 @@ export class UsersPrismaRepository implements UserRepository {
 
     return user;
   }
-  findAll(): User[] | Promise<User[]> {
-    throw new Error('Method not implemented.');
+  async findAll(): Promise<User[]> {
+    const users = await this.prisma.user.findMany();
+    return users;
   }
   async findOne(id: string): Promise<User> {
     const user = await this.prisma.user.findUnique({ where: { id } });
