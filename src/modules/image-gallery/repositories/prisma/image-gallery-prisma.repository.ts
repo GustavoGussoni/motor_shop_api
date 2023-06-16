@@ -26,7 +26,10 @@ export class ImageGalleryPrismaRepository implements ImageGalleryRepository {
 
     return plainToInstance(ImageGallery, image);
   }
-  remove(id: string): void | Promise<void> {
-    throw new Error('Method not implemented.');
+  async remove(id: string): Promise<void> {
+    const image = await this.prisma.imageGallery.delete({
+      where: { id },
+    });
+    return;
   }
 }
