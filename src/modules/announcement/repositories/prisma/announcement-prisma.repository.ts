@@ -86,7 +86,6 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
       description,
       cover_image,
       is_activate,
-      image_gallery,
     } = data;
     const announcement = await this.prisma.announcement.update({
       where: { id },
@@ -104,17 +103,6 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
         is_activate,
       },
     });
-
-    // image_gallery.map(async (imageObj) => {
-    //   const image = new ImageGallery();
-    //   Object.assign(image, {
-    //     ...imageObj,
-    //   });
-
-    //   const newImage = await this.prisma.imageGallery.update({
-    //     data: { ...image, announcementId: newAnnouncement.id },
-    //   });
-    // });
 
     return plainToInstance(Announcement, announcement);
   }
