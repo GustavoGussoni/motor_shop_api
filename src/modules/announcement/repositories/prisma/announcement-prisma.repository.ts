@@ -15,7 +15,6 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
     userId: string,
   ): Promise<Announcement> {
     const {
-      name_car,
       brand,
       year,
       fuel,
@@ -31,7 +30,6 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
 
     const announcement = new Announcement();
     Object.assign(announcement, {
-      name_car,
       brand,
       year,
       fuel,
@@ -85,7 +83,6 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
 
   async update(id: string, data: UpdateAnnouncementDto): Promise<Announcement> {
     const {
-      name_car,
       brand,
       year,
       fuel,
@@ -100,7 +97,6 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
     const announcement = await this.prisma.announcement.update({
       where: { id },
       data: {
-        name_car,
         brand,
         year,
         fuel,
