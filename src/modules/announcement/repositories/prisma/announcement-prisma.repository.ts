@@ -68,6 +68,8 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
         user: {
           select: {
             name: true,
+            description: true,
+            is_advertiser: true,
           },
         },
       },
