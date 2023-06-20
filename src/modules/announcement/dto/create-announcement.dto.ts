@@ -16,11 +16,6 @@ export class CreateAnnouncementDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(20)
-  name_car: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(20)
   brand: string;
 
   @IsString()
