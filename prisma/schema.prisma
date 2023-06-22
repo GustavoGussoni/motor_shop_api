@@ -12,7 +12,6 @@ datasource db {
 
 model Announcement {
   id            String         @id @default(uuid())
-  name_car      String         @db.VarChar(20)
   brand         String         @db.VarChar(20)
   year          String         @db.VarChar(4)
   fuel          Int            @db.Integer()
