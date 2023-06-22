@@ -24,7 +24,6 @@ export class UsersPrismaRepository implements UserRepository {
     const user = new User();
     Object.assign(user, {
       ...data,
-      birthdate: new Date(data.birthdate),
     });
 
     const newUser = await this.prisma.user.create({
@@ -51,8 +50,23 @@ export class UsersPrismaRepository implements UserRepository {
 
     return plainToInstance(User, user);
   }
-  update(id: string, data: UpdateUserDto): User | Promise<User> {
-    throw new Error('Method not implemented.');
+  async update(id: string, data: UpdateUserDto): Promise<User> {
+    const { cellphone, cpf, description, email, name, password, birthdate } =
+      data;
+    const userUpdate = await this.prisma.user.update({
+      where: { id },
+      data: {
+        cellphone,
+        cpf,
+        description,
+        name,
+        password,
+        birthdate,
+        email,
+      },
+    });
+
+    return plainToInstance(User, userUpdate);
   }
   async delete(id: string): Promise<void> {
     await this.prisma.user.delete({
