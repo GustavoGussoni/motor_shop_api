@@ -48,4 +48,20 @@ export class UsersController {
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
   }
+
+  @HttpCode(200)
+  @Post('resetPassword')
+  async sendEmailResetPassword(@Body('email') email: string) {
+    await this.usersService.sendEmailResetPassword(email);
+    return { message: 'Token enviado com sucesso!' };
+  }
+
+  @Patch('resetPassword/:token')
+  async resetPassword(
+    @Param('token') token: string,
+    @Body('password') password: string,
+  ) {
+    await this.usersService.resetPassword(token, password);
+    return { message: 'Senha redefinida com sucesso!' };
+  }
 }

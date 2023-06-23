@@ -12,6 +12,7 @@ export abstract class AnnouncementRepository {
   abstract update(
     id: string,
     data: UpdateAnnouncementDto,
+    userId: string,
   ): Promise<Announcement> | Announcement;
-  abstract remove(id: string): Promise<void> | void;
+  abstract remove(id: string, userId: string): Promise<void> | void;
 }

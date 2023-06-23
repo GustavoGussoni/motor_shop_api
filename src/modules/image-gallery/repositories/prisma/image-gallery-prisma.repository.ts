@@ -9,15 +9,25 @@ import { plainToInstance } from 'class-transformer';
 @Injectable()
 export class ImageGalleryPrismaRepository implements ImageGalleryRepository {
   constructor(private prisma: PrismaService) {}
-  create(data: CreateImageGalleryDto): ImageGallery | Promise<ImageGallery> {
+
+  async create(data: CreateImageGalleryDto): Promise<ImageGallery> {
     throw new Error('Method not implemented.');
   }
-  findAll(): ImageGallery[] | Promise<ImageGallery[]> {
+  async findAll(): Promise<ImageGallery[]> {
     throw new Error('Method not implemented.');
   }
-  findOne(id: string): ImageGallery | Promise<ImageGallery> {
+  async findOne(id: string): Promise<ImageGallery> {
     throw new Error('Method not implemented.');
   }
+
+  async findByImage(image: string): Promise<ImageGallery> {
+    const imageSearch = await this.prisma.imageGallery.findFirst({
+      where: { image: image },
+    });
+
+    return imageSearch;
+  }
+
   async update(id: string, data: UpdateImageGalleryDto): Promise<ImageGallery> {
     const image = await this.prisma.imageGallery.update({
       where: { id },

@@ -12,6 +12,7 @@ datasource db {
 
 model Announcement {
   id            String         @id @default(uuid())
+  model         String         @db.VarChar(127)
   brand         String         @db.VarChar(20)
   year          String         @db.VarChar(4)
   fuel          Int            @db.Integer()
@@ -24,7 +25,7 @@ model Announcement {
   is_activate   Boolean        @default(false) @db.Boolean()
   image_gallery ImageGallery[]
 
-  user   User   @relation(fields: [userId], references: [id],onDelete: Cascade,onUpdate: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String
 
   @@map("announcements")
@@ -51,6 +52,7 @@ model User {
   is_admin      Boolean  @default(false) @db.Boolean()
   is_advertiser Boolean  @default(false) @db.Boolean()
   password      String   @db.VarChar(128)
+  reset_token   String?
 
   address   Address @relation(fields: [addressId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   addressId String  @unique

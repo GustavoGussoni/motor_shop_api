@@ -2,7 +2,6 @@ import { randomUUID } from 'node:crypto';
 
 export class Announcement {
   readonly id: string;
-  name_car: string;
   brand: string;
   model: string;
   year: string;

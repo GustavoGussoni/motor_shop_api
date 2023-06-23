@@ -8,6 +8,7 @@ export abstract class ImageGalleryRepository {
   ): Promise<ImageGallery> | ImageGallery;
   abstract findAll(): Promise<ImageGallery[]> | ImageGallery[];
   abstract findOne(id: string): Promise<ImageGallery> | ImageGallery;
+  abstract findByImage(image: string): Promise<ImageGallery> | ImageGallery;
   abstract update(
     id: string,
     data: UpdateImageGalleryDto,
