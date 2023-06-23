@@ -62,22 +62,29 @@ export class UsersPrismaRepository implements UserRepository {
     return plainToInstance(User, user);
   }
   async update(id: string, data: UpdateUserDto): Promise<User> {
-    const { cellphone, cpf, description, email, name, password, birthdate } =
-      data;
+    const { address, ...rest } = data;
     const userUpdate = await this.prisma.user.update({
       where: { id },
       data: {
-        cellphone,
-        cpf,
-        description,
-        name,
-        password,
-        birthdate,
-        email,
+        ...rest,
       },
     });
 
-    return plainToInstance(User, userUpdate);
+    const findUser = await this.prisma.user.findUnique({
+      where: { id },
+    });
+
+    const newAddress = await this.prisma.address.update({
+      where: { id: findUser.addressId },
+      data: { ...address },
+    });
+
+    const findUserReturn = await this.prisma.user.findUnique({
+      where: { id },
+      include: { address: true },
+    });
+
+    return plainToInstance(User, findUserReturn);
   }
   async updateToken(email: string, resetToken: string): Promise<void> {
     await this.prisma.user.update({
