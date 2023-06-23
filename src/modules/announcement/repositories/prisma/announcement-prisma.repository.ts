@@ -119,6 +119,21 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
   async findOne(id: string): Promise<Announcement> {
     const announcement = await this.prisma.announcement.findUnique({
       where: { id },
+      include: {
+        user: {
+          select: {
+            name: true,
+            description: true,
+            is_advertiser: true,
+          },
+        },
+        image_gallery: {
+          select: {
+            image: true,
+            id: true,
+          },
+        },
+      },
     });
     return plainToInstance(Announcement, announcement);
   }
