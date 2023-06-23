@@ -8,11 +8,15 @@ import {
   Delete,
   UseGuards,
   Request,
+  Query,
+  ParseIntPipe,
+  HttpStatus,
 } from '@nestjs/common';
 import { AnnouncementService } from './announcement.service';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { PaginationParamsDto } from './dto/paginate-announcement.dto';
 
 @Controller('announcement')
 export class AnnouncementController {
@@ -26,9 +30,13 @@ export class AnnouncementController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
-  findAll() {
-    return this.announcementService.findAll();
+  async findAll(
+    @Query('page')
+    page: PaginationParamsDto,
+    @Query('perPage')
+    perPage: PaginationParamsDto,
+  ) {
+    return await this.announcementService.findAll(page, perPage);
   }
 
   @Get(':id')
