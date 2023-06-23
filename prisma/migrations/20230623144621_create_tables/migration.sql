@@ -38,6 +38,7 @@ CREATE TABLE "users" (
     "is_admin" BOOLEAN NOT NULL DEFAULT false,
     "is_advertiser" BOOLEAN NOT NULL DEFAULT false,
     "password" VARCHAR(128) NOT NULL,
+    "reset_token" TEXT,
     "addressId" TEXT NOT NULL,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
