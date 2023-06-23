@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
 import { AnnouncementRepository } from './repositories/announcement.repository';
+import { PaginationParamsDto } from './dto/paginate-announcement.dto';
 
 @Injectable()
 export class AnnouncementService {
@@ -15,8 +16,12 @@ export class AnnouncementService {
     return announcement;
   }
 
-  async findAll() {
-    const announcements = await this.announcementRepository.findAll();
+  async findAll(page: PaginationParamsDto, perPage: PaginationParamsDto) {
+    const announcements = await this.announcementRepository.findAll(
+      page,
+      perPage,
+    );
+
     return announcements;
   }
 

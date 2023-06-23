@@ -6,6 +6,7 @@ import { UpdateAnnouncementDto } from '../../dto/update-announcement.dto';
 import { Announcement } from '../../entities/announcement.entity';
 import { AnnouncementRepository } from '../announcement.repository';
 import { ImageGallery } from 'src/modules/image-gallery/entities/image-gallery.entity';
+import { PaginationParamsDto } from '../../dto/paginate-announcement.dto';
 
 @Injectable()
 export class AnnouncementPrismaRepository implements AnnouncementRepository {
@@ -35,7 +36,7 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
       });
     });
 
-    const findAnnouncement = await this.prisma.announcement.findUniqueOrThrow({
+    const findAnnouncement = await this.prisma.announcement.findUnique({
       where: { id: newAnnouncement.id },
       include: {
         image_gallery: {
@@ -49,7 +50,53 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
 
     return plainToInstance(Announcement, findAnnouncement);
   }
-  async findAll(): Promise<Announcement[]> {
+  async findAll(
+    page: PaginationParamsDto,
+    perPage: PaginationParamsDto,
+  ): Promise<Announcement[]> {
+    if (typeof page !== 'object' && typeof perPage === 'object') {
+      const announcementsPage = await this.prisma.announcement.findMany({
+        skip: Number(page),
+        include: {
+          user: {
+            select: {
+              name: true,
+              description: true,
+              is_advertiser: true,
+            },
+          },
+          image_gallery: {
+            select: {
+              image: true,
+            },
+          },
+        },
+      });
+      return plainToInstance(Announcement, announcementsPage);
+    }
+
+    if (typeof page !== 'object' && typeof perPage !== 'object') {
+      const announcementsPageAndPerPage =
+        await this.prisma.announcement.findMany({
+          skip: Number(page),
+          take: Number(perPage),
+          include: {
+            user: {
+              select: {
+                name: true,
+                description: true,
+                is_advertiser: true,
+              },
+            },
+            image_gallery: {
+              select: {
+                image: true,
+              },
+            },
+          },
+        });
+      return plainToInstance(Announcement, announcementsPageAndPerPage);
+    }
     const announcements = await this.prisma.announcement.findMany({
       include: {
         user: {
@@ -66,6 +113,7 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
         },
       },
     });
+
     return plainToInstance(Announcement, announcements);
   }
   async findOne(id: string): Promise<Announcement> {
