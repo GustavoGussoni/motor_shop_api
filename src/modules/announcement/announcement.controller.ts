@@ -26,6 +26,7 @@ export class AnnouncementController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   findAll() {
     return this.announcementService.findAll();
   }
@@ -37,6 +38,7 @@ export class AnnouncementController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   update(
     @Param('id') id: string,
     @Body() updateAnnouncementDto: UpdateAnnouncementDto,
@@ -50,7 +52,8 @@ export class AnnouncementController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.announcementService.remove(id);
+  @UseGuards(JwtAuthGuard)
+  remove(@Param('id') id: string, @Request() req) {
+    return this.announcementService.remove(id, req.user.id);
   }
 }

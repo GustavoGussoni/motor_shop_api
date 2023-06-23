@@ -1,7 +1,7 @@
 -- CreateTable
 CREATE TABLE "announcements" (
     "id" TEXT NOT NULL,
-    "name_car" VARCHAR(20) NOT NULL,
+    "model" VARCHAR(127) NOT NULL,
     "brand" VARCHAR(20) NOT NULL,
     "year" VARCHAR(4) NOT NULL,
     "fuel" INTEGER NOT NULL,
@@ -11,6 +11,7 @@ CREATE TABLE "announcements" (
     "price" INTEGER NOT NULL,
     "description" TEXT NOT NULL,
     "cover_image" TEXT NOT NULL,
+    "is_activate" BOOLEAN NOT NULL DEFAULT false,
     "userId" TEXT NOT NULL,
 
     CONSTRAINT "announcements_pkey" PRIMARY KEY ("id")
@@ -50,19 +51,22 @@ CREATE TABLE "addresses" (
     "city" VARCHAR(50) NOT NULL,
     "street" VARCHAR(255) NOT NULL,
     "number" INTEGER NOT NULL,
-    "addOn" VARCHAR(10) NOT NULL,
+    "addOn" VARCHAR(10),
 
     CONSTRAINT "addresses_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "users_addressId_key" ON "users"("addressId");
 
 -- AddForeignKey
-ALTER TABLE "announcements" ADD CONSTRAINT "announcements_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "announcements" ADD CONSTRAINT "announcements_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "images_gallery" ADD CONSTRAINT "images_gallery_announcementId_fkey" FOREIGN KEY ("announcementId") REFERENCES "announcements"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "users" ADD CONSTRAINT "users_addressId_fkey" FOREIGN KEY ("addressId") REFERENCES "addresses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "users" ADD CONSTRAINT "users_addressId_fkey" FOREIGN KEY ("addressId") REFERENCES "addresses"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -14,51 +14,40 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
     data: CreateAnnouncementDto,
     userId: string,
   ): Promise<Announcement> {
-    const {
-      brand,
-      year,
-      fuel,
-      kilometers,
-      color,
-      price_fipe,
-      price,
-      description,
-      cover_image,
-      is_activate,
-      image_gallery,
-    } = data;
+    const { image_gallery, ...rest } = data;
 
     const announcement = new Announcement();
     Object.assign(announcement, {
-      brand,
-      year,
-      fuel,
-      kilometers,
-      color,
-      price_fipe,
-      price,
-      description,
-      cover_image,
-      is_activate,
+      ...rest,
     });
 
     const newAnnouncement = await this.prisma.announcement.create({
       data: { ...announcement, userId },
-      include: { image_gallery: true },
     });
 
-    image_gallery?.map(async (imageObj) => {
-      const image = new ImageGallery();
+    const image = new ImageGallery();
+    const createImage = image_gallery.map(async (imageObj) => {
       Object.assign(image, {
         ...imageObj,
       });
-
-      await this.prisma.imageGallery.create({
-        data: { ...image, announcementId: newAnnouncement.id },
+      const imageAdded = await this.prisma.imageGallery.create({
+        data: { ...imageObj, announcementId: newAnnouncement.id },
       });
     });
 
-    return plainToInstance(Announcement, newAnnouncement);
+    const findAnnouncement = await this.prisma.announcement.findUniqueOrThrow({
+      where: { id: newAnnouncement.id },
+      include: {
+        image_gallery: {
+          select: {
+            image: true,
+            id: true,
+          },
+        },
+      },
+    });
+
+    return plainToInstance(Announcement, findAnnouncement);
   }
   async findAll(): Promise<Announcement[]> {
     const announcements = await this.prisma.announcement.findMany({
@@ -68,6 +57,11 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
             name: true,
             description: true,
             is_advertiser: true,
+          },
+        },
+        image_gallery: {
+          select: {
+            image: true,
           },
         },
       },
@@ -82,35 +76,46 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
   }
 
   async update(id: string, data: UpdateAnnouncementDto): Promise<Announcement> {
-    const {
-      brand,
-      year,
-      fuel,
-      kilometers,
-      color,
-      price_fipe,
-      price,
-      description,
-      cover_image,
-      is_activate,
-    } = data;
+    const { image_gallery, ...rest } = data;
+    // const imageSearch = await this.prisma.imageGallery.findMany({
+    //   where: { announcementId: id },
+    // });
+    // console.log(imageSearch);
+
+    // const changeImage = image_gallery.map(async (imageObj) => {
+    //   const imageUpdate = await this.prisma.imageGallery.update({
+    //     where: {}
+    //     data: { ...imageObj },
+    //   });
+    // });
+
     const announcement = await this.prisma.announcement.update({
       where: { id },
       data: {
-        brand,
-        year,
-        fuel,
-        kilometers,
-        color,
-        price_fipe,
-        price,
-        description,
-        cover_image,
-        is_activate,
+        ...rest,
+      },
+      include: {
+        image_gallery: {
+          select: {
+            image: true,
+          },
+        },
       },
     });
 
-    return plainToInstance(Announcement, announcement);
+    const findAnnouncement = await this.prisma.announcement.findUniqueOrThrow({
+      where: { id: announcement.id },
+      include: {
+        image_gallery: {
+          select: {
+            image: true,
+            id: true,
+          },
+        },
+      },
+    });
+
+    return plainToInstance(Announcement, findAnnouncement);
   }
 
   async remove(id: string): Promise<void> {

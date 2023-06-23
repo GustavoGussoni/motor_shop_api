@@ -37,19 +37,21 @@ export class AnnouncementService {
     if (!announcement) {
       throw new NotFoundException('Announcement not found');
     }
+
     const announcementUpdate = await this.announcementRepository.update(
       id,
       updateAnnouncementDto,
+      userId,
     );
     return announcementUpdate;
   }
 
-  async remove(id: string) {
+  async remove(id: string, userId: string) {
     const announcement = await this.announcementRepository.findOne(id);
     if (!announcement) {
       throw new NotFoundException('Announcement not found');
     }
-    await this.announcementRepository.remove(id);
+    await this.announcementRepository.remove(id, userId);
     return;
   }
 }

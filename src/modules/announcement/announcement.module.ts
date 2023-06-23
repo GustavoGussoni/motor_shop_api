@@ -5,9 +5,10 @@ import { PrismaService } from 'src/database/prisma.service';
 import { AnnouncementRepository } from './repositories/announcement.repository';
 import { AnnouncementPrismaRepository } from './repositories/prisma/announcement-prisma.repository';
 import { UsersModule } from '../users/users.module';
+import { ImageGalleryModule } from '../image-gallery/image-gallery.module';
 
 @Module({
-  imports: [forwardRef(() => UsersModule)],
+  imports: [UsersModule, ImageGalleryModule],
   controllers: [AnnouncementController],
   providers: [
     AnnouncementService,

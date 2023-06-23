@@ -15,6 +15,11 @@ import {
 export class CreateAnnouncementDto {
   @IsString()
   @IsNotEmpty()
+  @MaxLength(127)
+  model: string;
+
+  @IsString()
+  @IsNotEmpty()
   @MaxLength(20)
   brand: string;
 
