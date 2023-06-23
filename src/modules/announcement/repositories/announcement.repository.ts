@@ -11,7 +11,8 @@ export abstract class AnnouncementRepository {
   abstract findAll(
     page: PaginationParamsDto,
     perPage: PaginationParamsDto,
-  ): Promise<Announcement[]> | Announcement[];
+    group: string | undefined,
+  ): Promise<Announcement[]> | Announcement[] | object;
   abstract findOne(id: string): Promise<Announcement> | Announcement;
   abstract update(
     id: string,

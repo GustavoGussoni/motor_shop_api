@@ -16,10 +16,15 @@ export class AnnouncementService {
     return announcement;
   }
 
-  async findAll(page: PaginationParamsDto, perPage: PaginationParamsDto) {
+  async findAll(
+    page: PaginationParamsDto,
+    perPage: PaginationParamsDto,
+    group: string | undefined,
+  ) {
     const announcements = await this.announcementRepository.findAll(
       page,
       perPage,
+      group,
     );
 
     return announcements;

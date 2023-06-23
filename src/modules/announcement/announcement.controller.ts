@@ -35,8 +35,9 @@ export class AnnouncementController {
     page: PaginationParamsDto,
     @Query('perPage')
     perPage: PaginationParamsDto,
+    @Query('group') group: string | undefined,
   ) {
-    return await this.announcementService.findAll(page, perPage);
+    return await this.announcementService.findAll(page, perPage, group);
   }
 
   @Get(':id')
