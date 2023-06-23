@@ -50,10 +50,19 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
 
     return plainToInstance(Announcement, findAnnouncement);
   }
+
+  private groupdBy(announcements: Announcement[], key: string) {
+    return announcements.reduce((acc, curr) => {
+      (acc[curr[key]] = acc[curr[key]] || []).push(curr);
+      return acc;
+    }, {});
+  }
+
   async findAll(
     page: PaginationParamsDto,
     perPage: PaginationParamsDto,
-  ): Promise<Announcement[]> {
+    group: string,
+  ): Promise<object | Announcement[]> {
     if (typeof page !== 'object' && typeof perPage === 'object') {
       const announcementsPage = await this.prisma.announcement.findMany({
         skip: Number(page),
@@ -72,7 +81,10 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
           },
         },
       });
-      return plainToInstance(Announcement, announcementsPage);
+      if (group) {
+        return this.groupdBy(announcementsPage, group);
+      }
+      return announcementsPage;
     }
 
     if (typeof page !== 'object' && typeof perPage !== 'object') {
@@ -95,8 +107,12 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
             },
           },
         });
-      return plainToInstance(Announcement, announcementsPageAndPerPage);
+      if (group) {
+        return this.groupdBy(announcementsPageAndPerPage, group);
+      }
+      return announcementsPageAndPerPage;
     }
+
     const announcements = await this.prisma.announcement.findMany({
       include: {
         user: {
@@ -114,7 +130,10 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
       },
     });
 
-    return plainToInstance(Announcement, announcements);
+    if (group) {
+      return this.groupdBy(announcements, group);
+    }
+    return announcements;
   }
   async findOne(id: string): Promise<Announcement> {
     const announcement = await this.prisma.announcement.findUnique({
