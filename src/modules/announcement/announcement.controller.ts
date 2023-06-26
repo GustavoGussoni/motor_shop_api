@@ -9,8 +9,7 @@ import {
   UseGuards,
   Request,
   Query,
-  ParseIntPipe,
-  HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import { AnnouncementService } from './announcement.service';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
@@ -60,6 +59,7 @@ export class AnnouncementController {
     );
   }
 
+  @HttpCode(204)
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: string, @Request() req) {

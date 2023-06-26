@@ -61,7 +61,6 @@ export class AnnouncementService {
     if (!announcement) {
       throw new NotFoundException('Announcement not found');
     }
-    await this.announcementRepository.remove(id, userId);
-    return;
+    return await this.announcementRepository.remove(id);
   }
 }
