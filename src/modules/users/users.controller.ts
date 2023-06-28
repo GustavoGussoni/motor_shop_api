@@ -20,7 +20,6 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
@@ -35,8 +34,9 @@ export class UsersController {
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
-  @UseInterceptors(ClassSerializerInterceptor)
+
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
@@ -50,12 +50,14 @@ export class UsersController {
 
   @HttpCode(200)
   @Post('resetPassword')
+  @UseGuards(JwtAuthGuard)
   async sendEmailResetPassword(@Body('email') email: string) {
     await this.usersService.sendEmailResetPassword(email);
     return { message: 'Token enviado com sucesso!' };
   }
 
   @Patch('resetPassword/:token')
+  @UseGuards(JwtAuthGuard)
   async resetPassword(
     @Param('token') token: string,
     @Body('password') password: string,
