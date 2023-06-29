@@ -6,6 +6,7 @@ import { ImageGalleryModule } from './modules/image-gallery/image-gallery.module
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { GuardModule } from './guards/guard.module';
+import { CommentsModule } from './modules/comments/comments.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { GuardModule } from './guards/guard.module';
     UsersModule,
     AuthModule,
     GuardModule,
+    CommentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
