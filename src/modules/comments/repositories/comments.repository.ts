@@ -5,5 +5,6 @@ export abstract class CommentsRepository {
   abstract create(
     data: CreateCommentsDto,
     announcementId: string,
+    userId: string
   ): Promise<Comments> | Comments;
 }
