@@ -10,29 +10,30 @@ import {
   IsArray,
   IsBoolean,
   IsOptional,
+  IsEnum,
+  NotEquals,
 } from 'class-validator';
+import { FuelEnum } from '../enum/fuel-type.enum';
 
 export class CreateAnnouncementDto {
   @IsString()
-  @IsNotEmpty()
   @MaxLength(127)
+  @IsNotEmpty()
   model: string;
 
   @IsString()
-  @IsNotEmpty()
   @MaxLength(20)
+  @IsNotEmpty()
   brand: string;
 
   @IsString()
-  @IsNotEmpty()
   @MaxLength(4)
+  @IsNotEmpty()
   year: string;
 
-  @IsInt()
-  @Min(1)
-  @Max(3)
+  @IsEnum(FuelEnum)
   @IsNotEmpty()
-  fuel: number;
+  readonly fuel: FuelEnum;
 
   @IsInt()
   @Min(0)
