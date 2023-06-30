@@ -5,7 +5,7 @@ export class Announcement {
   brand: string;
   model: string;
   year: string;
-  fuel: number;
+  fuel: string;
   kilometers: number;
   color: string;
   price_fipe: number;
