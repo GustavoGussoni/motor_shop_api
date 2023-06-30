@@ -28,7 +28,7 @@ export class CommentsPrismaRepository implements CommentsRepository {
     const newComments = await this.prisma.comments.create({
       data: { ...comments, announcementId, userId },
       include: {
-        User: {
+        user: {
           select: {
             name: true,
           },

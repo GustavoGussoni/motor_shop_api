@@ -36,7 +36,7 @@ model ImageGallery {
   id    String @id @default(uuid())
   image String @db.Text()
 
-  Announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   announcementId String
 
   @@map("images_gallery")
@@ -83,10 +83,10 @@ model Comments {
   comments   String   @db.Text()
   created_at DateTime @default(now())
 
-  Announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  announcement   Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   announcementId String
 
-  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String
 
   @@map("comments")

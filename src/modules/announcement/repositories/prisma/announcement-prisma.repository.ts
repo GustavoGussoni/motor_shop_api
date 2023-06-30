@@ -79,6 +79,17 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
               image: true,
             },
           },
+          comments: {
+            select: {
+              comments: true,
+              created_at: true,
+              user: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
         },
       });
       if (group) {
@@ -105,6 +116,17 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
                 image: true,
               },
             },
+            comments: {
+              select: {
+                comments: true,
+                created_at: true,
+                user: {
+                  select: {
+                    name: true,
+                  },
+                },
+              },
+            },
           },
         });
       if (group) {
@@ -125,6 +147,17 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
         image_gallery: {
           select: {
             image: true,
+          },
+        },
+        comments: {
+          select: {
+            comments: true,
+            created_at: true,
+            user: {
+              select: {
+                name: true,
+              },
+            },
           },
         },
       },
@@ -155,8 +188,8 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
         comments: {
           select: {
             comments: true,
-            created_at: true, 
-            User: {
+            created_at: true,
+            user: {
               select: {
                 name: true,
               },
