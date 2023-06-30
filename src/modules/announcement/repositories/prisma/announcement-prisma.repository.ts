@@ -152,6 +152,7 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
             id: true,
           },
         },
+        comments: true
       },
     });
     return plainToInstance(Announcement, announcement);
