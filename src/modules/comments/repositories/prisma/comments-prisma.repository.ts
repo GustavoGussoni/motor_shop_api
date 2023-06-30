@@ -10,6 +10,7 @@ export class CommentsPrismaRepository implements CommentsRepository {
   async create(
     data: CreateCommentsDto,
     announcementId: string,
+    userId: string,
   ): Promise<Comments> {
     const announcement = await this.prisma.announcement.findUnique({
       where: { id: announcementId },
@@ -25,7 +26,14 @@ export class CommentsPrismaRepository implements CommentsRepository {
     });
 
     const newComments = await this.prisma.comments.create({
-      data: { ...comments, announcementId },
+      data: { ...comments, announcementId, userId },
+      include: {
+        User: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
 
     return newComments;

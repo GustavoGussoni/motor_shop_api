@@ -9,11 +9,12 @@ export class CommentsService {
     private commentsRepository: CommentsRepository
   ) {}
 
-  async create(createCommentsDto: CreateCommentsDto, announcementId: string) {
+  async create(createCommentsDto: CreateCommentsDto, announcementId: string, userId: string) {
 
     const comments = await this.commentsRepository.create(
       createCommentsDto,
       announcementId,
+      userId
     );
 
     return comments;

@@ -152,7 +152,17 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
             id: true,
           },
         },
-        comments: true
+        comments: {
+          select: {
+            comments: true,
+            created_at: true, 
+            User: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
       },
     });
     return plainToInstance(Announcement, announcement);
