@@ -26,15 +26,17 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
       data: { ...announcement, userId },
     });
 
-    const image = new ImageGallery();
-    const createImage = image_gallery.map(async (imageObj) => {
-      Object.assign(image, {
-        ...imageObj,
+    if (image_gallery) {
+      const image = new ImageGallery();
+      const createImage = image_gallery.map(async (imageObj) => {
+        Object.assign(image, {
+          ...imageObj,
+        });
+        const imageAdded = await this.prisma.imageGallery.create({
+          data: { ...imageObj, announcementId: newAnnouncement.id },
+        });
       });
-      const imageAdded = await this.prisma.imageGallery.create({
-        data: { ...imageObj, announcementId: newAnnouncement.id },
-      });
-    });
+    }
 
     const findAnnouncement = await this.prisma.announcement.findUnique({
       where: { id: newAnnouncement.id },
@@ -63,57 +65,16 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
     perPage: PaginationParamsDto,
     group: string,
   ): Promise<object | Announcement[]> {
-    if (typeof page !== 'object' && typeof perPage === 'object') {
-      const announcementsPage = await this.prisma.announcement.findMany({
-        skip: Number(page),
-        include: {
-          user: {
-            select: {
-              name: true,
-              description: true,
-              is_advertiser: true,
-            },
-          },
-          image_gallery: {
-            select: {
-              image: true,
-            },
-          },
-        },
-      });
-      if (group) {
-        return this.groupdBy(announcementsPage, group);
-      }
-      return announcementsPage;
-    }
+    let queryPage: number = Number(page.page) || 1;
+    queryPage = page.page <= 0 ? 1 : page.page;
 
-    if (typeof page !== 'object' && typeof perPage !== 'object') {
-      const announcementsPageAndPerPage =
-        await this.prisma.announcement.findMany({
-          skip: Number(page),
-          take: Number(perPage),
-          include: {
-            user: {
-              select: {
-                name: true,
-                description: true,
-                is_advertiser: true,
-              },
-            },
-            image_gallery: {
-              select: {
-                image: true,
-              },
-            },
-          },
-        });
-      if (group) {
-        return this.groupdBy(announcementsPageAndPerPage, group);
-      }
-      return announcementsPageAndPerPage;
-    }
+    let queryPerPage: number = Number(perPage.perPage) || 12;
+    queryPerPage =
+      perPage.perPage < 1 || perPage.perPage > 12 ? 12 : queryPerPage;
 
     const announcements = await this.prisma.announcement.findMany({
+      skip: queryPage,
+      take: queryPerPage,
       include: {
         user: {
           select: {
@@ -127,6 +88,17 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
             image: true,
           },
         },
+        comments: {
+          select: {
+            comments: true,
+            created_at: true,
+            user: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -135,6 +107,7 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
     }
     return announcements;
   }
+
   async findOne(id: string): Promise<Announcement> {
     const announcement = await this.prisma.announcement.findUnique({
       where: { id },
@@ -152,7 +125,17 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
             id: true,
           },
         },
-        comments: true
+        comments: {
+          select: {
+            comments: true,
+            created_at: true,
+            user: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
       },
     });
     return plainToInstance(Announcement, announcement);

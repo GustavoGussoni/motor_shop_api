@@ -4,6 +4,7 @@ export class Comments {
   readonly id: string;
   comments: string;
   readonly announcementId: string;
+  readonly userId: string
 
   readonly created_at: Date 
 
