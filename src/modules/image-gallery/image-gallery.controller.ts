@@ -10,7 +10,9 @@ import {
 import { ImageGalleryService } from './image-gallery.service';
 import { CreateImageGalleryDto } from './dto/create-image-gallery.dto';
 import { UpdateImageGalleryDto } from './dto/update-image-gallery.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('images-gallery')
 @Controller('image-gallery')
 export class ImageGalleryController {
   constructor(private readonly imageGalleryService: ImageGalleryService) {}
