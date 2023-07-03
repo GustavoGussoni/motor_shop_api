@@ -5,7 +5,7 @@ export class LoginDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  @Max(254)
+  // @Max(254)
   email: string;
 
   @ApiProperty()
