@@ -56,8 +56,26 @@ export class AnnouncementController {
     @Query('perPage')
     perPage: PaginationParamsDto,
     @Query('group') group: string | undefined,
+    @Query('brand') brand: string | undefined,
+    @Query('model') model: string | undefined,
+    @Query('color') color: string | undefined,
+    @Query('year') year: string | undefined,
+    @Query('fuel') fuel: string | undefined,
+    @Query('kilometer') kilometer: string | undefined,
+    @Query('price') price: string | undefined,
   ) {
-    return await this.announcementService.findAll(page, perPage, group);
+    return await this.announcementService.findAll(
+      page,
+      perPage,
+      group,
+      brand,
+      model,
+      color,
+      year,
+      fuel,
+      kilometer,
+      price,
+    );
   }
 
   @Get(':id')

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
 import { AnnouncementRepository } from './repositories/announcement.repository';
@@ -20,11 +24,25 @@ export class AnnouncementService {
     page: PaginationParamsDto,
     perPage: PaginationParamsDto,
     group: string | undefined,
+    brand: string | undefined,
+    model: string | undefined,
+    color: string | undefined,
+    year: string | undefined,
+    fuel: string | undefined,
+    kilometer: string | undefined,
+    price: string | undefined,
   ) {
     const announcements = await this.announcementRepository.findAll(
       page,
       perPage,
       group,
+      brand,
+      model,
+      color,
+      year,
+      fuel,
+      kilometer,
+      price,
     );
 
     return announcements;
@@ -48,6 +66,10 @@ export class AnnouncementService {
       throw new NotFoundException('Announcement not found');
     }
 
+    if (announcement.userId != userId) {
+      throw new UnauthorizedException('Permission has been denied');
+    }
+
     const announcementUpdate = await this.announcementRepository.update(
       id,
       updateAnnouncementDto,
@@ -61,6 +83,11 @@ export class AnnouncementService {
     if (!announcement) {
       throw new NotFoundException('Announcement not found');
     }
+
+    if (announcement.userId != userId) {
+      throw new UnauthorizedException('Permission has been denied');
+    }
+
     return await this.announcementRepository.remove(id);
   }
 }
