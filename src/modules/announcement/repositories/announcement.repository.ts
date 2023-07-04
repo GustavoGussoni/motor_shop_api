@@ -12,6 +12,13 @@ export abstract class AnnouncementRepository {
     page: PaginationParamsDto,
     perPage: PaginationParamsDto,
     group: string | undefined,
+    brand: string | undefined,
+    model: string | undefined,
+    color: string | undefined,
+    year: string | undefined,
+    fuel: string | undefined,
+    kilometer: string | undefined,
+    price: string | undefined,
   ): Promise<Announcement[]> | Announcement[] | object;
   abstract findOne(id: string): Promise<Announcement> | Announcement;
   abstract update(
