@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ImageGallery } from '@prisma/client';
 import {
   IsString,
@@ -75,7 +75,7 @@ export class CreateAnnouncementDto {
   @IsNotEmpty()
   cover_image: string;
 
-  @ApiProperty({ default: [] })
+  @ApiPropertyOptional({ default: [] })
   @IsArray()
   @IsOptional()
   image_gallery?: ImageGallery[];

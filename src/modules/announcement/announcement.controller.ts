@@ -60,18 +60,18 @@ export class AnnouncementController {
     return await this.announcementService.findAll(page, perPage, group);
   }
 
-  @Get(':id')
+  @Get(':announcementId')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  findOne(@Param('id') id: string) {
+  findOne(@Param('announcementId') id: string) {
     return this.announcementService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch(':announcementId')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   update(
-    @Param('id') id: string,
+    @Param('announcementId') id: string,
     @Body() updateAnnouncementDto: UpdateAnnouncementDto,
     @Request() req,
   ) {
@@ -83,10 +83,10 @@ export class AnnouncementController {
   }
 
   @HttpCode(204)
-  @Delete(':id')
+  @Delete(':announcementId')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  remove(@Param('id') id: string, @Request() req) {
+  remove(@Param('announcementId') id: string, @Request() req) {
     return this.announcementService.remove(id, req.user.id);
   }
 }

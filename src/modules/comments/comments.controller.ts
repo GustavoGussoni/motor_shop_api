@@ -16,11 +16,11 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
-  @Post(':id')
+  @Post(':announcementId')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   create(
-    @Param('id') announcementId: string,
+    @Param('announcementId') announcementId: string,
     @Body() createCommentsDto: CreateCommentsDto,
     @Request() req,
   ) {

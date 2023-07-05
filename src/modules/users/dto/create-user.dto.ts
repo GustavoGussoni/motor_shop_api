@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { hashSync } from 'bcryptjs';
 import { Transform } from 'class-transformer';
 import {
@@ -69,13 +69,13 @@ export class CreateUserDto {
   @IsNotEmpty()
   description: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsBoolean()
   @IsOptional()
   @IsNotEmpty()
   is_admin: boolean;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsBoolean()
   @IsOptional()
   @IsNotEmpty()

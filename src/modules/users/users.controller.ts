@@ -14,6 +14,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -30,23 +32,25 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get(':userId')
+  findOne(@Param('userId') id: string) {
     return this.usersService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch(':userId')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  update(@Param('userId') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
   @HttpCode(204)
-  @Delete(':id')
+  @Delete(':userId')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  remove(@Param('id') id: string) {
+  remove(@Param('userId') id: string) {
     return this.usersService.remove(id);
   }
 
@@ -54,8 +58,8 @@ export class UsersController {
   @Post('resetPassword')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  async sendEmailResetPassword(@Body('email') email: string) {
-    await this.usersService.sendEmailResetPassword(email);
+  async sendEmailResetPassword(@Body() resetPassword: ResetPasswordDto) {
+    await this.usersService.sendEmailResetPassword(resetPassword.email);
     return { message: 'Token enviado com sucesso!' };
   }
 
@@ -64,9 +68,9 @@ export class UsersController {
   @ApiBearerAuth()
   async resetPassword(
     @Param('token') token: string,
-    @Body('password') password: string,
+    @Body() UpdatePassword: UpdatePasswordDto,
   ) {
-    await this.usersService.resetPassword(token, password);
+    await this.usersService.resetPassword(token, UpdatePassword.password);
     return { message: 'Senha redefinida com sucesso!' };
   }
 }
