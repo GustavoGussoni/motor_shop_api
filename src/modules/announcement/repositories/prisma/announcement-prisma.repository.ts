@@ -360,6 +360,7 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
         },
         comments: {
           select: {
+            id: true,
             comments: true,
             created_at: true,
             user: {
@@ -399,6 +400,7 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
         },
         comments: {
           select: {
+            id: true,
             comments: true,
             created_at: true,
             user: {

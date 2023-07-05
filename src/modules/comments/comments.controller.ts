@@ -19,11 +19,11 @@ import { UpdateICommentsDto } from './dto/update-comments';
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
-  @Post(':id')
+  @Post(':announcementId')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   create(
-    @Param('id') announcementId: string,
+    @Param('announcementId') announcementId: string,
     @Body() createCommentsDto: CreateCommentsDto,
     @Request() req,
   ) {

@@ -27,21 +27,21 @@ export class ImageGalleryController {
     return this.imageGalleryService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get(':imageId')
+  findOne(@Param('imageId') id: string) {
     return this.imageGalleryService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch(':imageId')
   update(
-    @Param('id') id: string,
+    @Param('imageId') id: string,
     @Body() updateImageGalleryDto: UpdateImageGalleryDto,
   ) {
     return this.imageGalleryService.update(id, updateImageGalleryDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete(':imageId')
+  remove(@Param('imageId') id: string) {
     return this.imageGalleryService.remove(id);
   }
 }
