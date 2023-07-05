@@ -15,7 +15,6 @@ import { AnnouncementService } from './announcement.service';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { PaginationParamsDto } from './dto/paginate-announcement.dto';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('announcements')
@@ -28,7 +27,12 @@ export class AnnouncementController {
   @ApiBearerAuth()
   create(@Body() createAnnouncementDto: CreateAnnouncementDto, @Request() req) {
     const userId = req.user.id;
-    return this.announcementService.create(createAnnouncementDto, userId);
+    const advertiser = req.user.is_advertiser;
+    return this.announcementService.create(
+      createAnnouncementDto,
+      userId,
+      advertiser,
+    );
   }
 
   @ApiQuery({
@@ -52,22 +56,24 @@ export class AnnouncementController {
   @Get()
   async findAll(
     @Query('page')
-    page: PaginationParamsDto,
+    page: number,
     @Query('perPage')
-    perPage: PaginationParamsDto,
-    @Query('group') group: string | undefined,
-    @Query('brand') brand: string | undefined,
-    @Query('model') model: string | undefined,
-    @Query('color') color: string | undefined,
-    @Query('year') year: string | undefined,
-    @Query('fuel') fuel: string | undefined,
-    @Query('kilometer') kilometer: string | undefined,
-    @Query('price') price: string | undefined,
+    perPage: number,
+    @Query('group') group: string,
+    @Query('brand') brand: string,
+    @Query('model') model: string,
+    @Query('color') color: string,
+    @Query('year') year: string,
+    @Query('fuel') fuel: string,
+    @Query('kilometer') kilometer: string,
+    @Query('price') price: string,
   ) {
-    return await this.announcementService.findAll(
-      page,
-      perPage,
-      group,
+    let queryPage: number = Number(page) || 1;
+    queryPage = Number(page) <= 0 ? 1 : page;
+
+    let queryPerPage: number = Number(perPage) || 12;
+    queryPerPage = Number(perPage) < 1 || Number(perPage) > 12 ? 12 : perPage;
+    const filters = {
       brand,
       model,
       color,
@@ -75,6 +81,12 @@ export class AnnouncementController {
       fuel,
       kilometer,
       price,
+    };
+    return await this.announcementService.findAll(
+      page,
+      perPage,
+      group,
+      filters,
     );
   }
 
