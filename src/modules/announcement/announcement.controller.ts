@@ -88,7 +88,6 @@ export class AnnouncementController {
   }
 
   @Get(':announcementId')
-  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   findOne(@Param('announcementId') id: string) {
     return this.announcementService.findOne(id);

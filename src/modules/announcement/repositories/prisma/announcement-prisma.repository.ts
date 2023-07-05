@@ -52,14 +52,6 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
     return plainToInstance(Announcement, findAnnouncement);
   }
 
-  private groupdBy(announcements: Announcement[], key: string) {
-    return announcements.reduce((acc, curr) => {
-      (acc[curr[key]] = acc[curr[key]] || []).push(curr);
-      return acc;
-    }, {});
-  }
-  private orderBy(orderBy: string, field: string) {}
-
   async findAll(
     page: number,
     perPage: number,
@@ -98,6 +90,15 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
       where: filters,
       orderBy: {
         model: 'asc',
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            description: true,
+            is_advertiser: true,
+          },
+        },
       },
     });
 
