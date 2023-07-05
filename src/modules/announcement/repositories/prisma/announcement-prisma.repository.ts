@@ -7,6 +7,7 @@ import { Announcement } from '../../entities/announcement.entity';
 import { AnnouncementRepository } from '../announcement.repository';
 import { ImageGallery } from 'src/modules/image-gallery/entities/image-gallery.entity';
 import { PaginationParamsDto } from '../../dto/paginate-announcement.dto';
+import { filter } from 'rxjs';
 
 @Injectable()
 export class AnnouncementPrismaRepository implements AnnouncementRepository {
@@ -61,324 +62,57 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
   }
 
   async findAll(
-    page: PaginationParamsDto,
-    perPage: PaginationParamsDto,
+    page: number,
+    perPage: number,
     group: string,
-    brand: string,
-    model: string,
-    color: string,
-    year: string,
-    fuel: string,
-    kilometers: string,
-    price: string,
+    filters: any,
   ): Promise<object | Announcement[]> {
-    let queryPage: number = Number(page.page) || 1;
-    queryPage = page.page <= 0 ? 1 : page.page;
+    page = Number(page) || 1;
+    page = page <= 0 ? 1 : page;
 
-    let queryPerPage: number = Number(perPage.perPage) || 12;
-    queryPerPage =
-      perPage.perPage < 1 || perPage.perPage > 12 ? 12 : queryPerPage;
+    perPage = Number(perPage) || 12;
+    perPage = perPage < 1 || perPage > 12 ? 12 : perPage;
 
-    if (brand !== undefined) {
-      const announcements = await this.prisma.announcement.findMany({
-        skip: queryPage,
-        take: queryPerPage,
-        where: { brand },
-        include: {
-          user: {
-            select: {
-              name: true,
-              description: true,
-              is_advertiser: true,
-            },
-          },
-          image_gallery: {
-            select: {
-              image: true,
-            },
-          },
-          comments: {
-            select: {
-              comments: true,
-              created_at: true,
-              user: {
-                select: {
-                  name: true,
-                },
-              },
-            },
-          },
-        },
-      });
-      return announcements;
-    }
-
-    if (brand && model !== undefined) {
-      const announcements = await this.prisma.announcement.findMany({
-        skip: queryPage,
-        take: queryPerPage,
-        where: {
-          brand,
-          AND: {
-            model,
-          },
-        },
-        include: {
-          user: {
-            select: {
-              name: true,
-              description: true,
-              is_advertiser: true,
-            },
-          },
-          image_gallery: {
-            select: {
-              image: true,
-            },
-          },
-          comments: {
-            select: {
-              comments: true,
-              created_at: true,
-              user: {
-                select: {
-                  name: true,
-                },
-              },
-            },
-          },
-        },
-      });
-      return announcements;
-    }
-
-    if (brand && model && color !== undefined) {
-      const announcements = await this.prisma.announcement.findMany({
-        skip: queryPage,
-        take: queryPerPage,
-        where: {
-          brand,
-          AND: {
-            model,
-            color,
-          },
-        },
-        include: {
-          user: {
-            select: {
-              name: true,
-              description: true,
-              is_advertiser: true,
-            },
-          },
-          image_gallery: {
-            select: {
-              image: true,
-            },
-          },
-          comments: {
-            select: {
-              comments: true,
-              created_at: true,
-              user: {
-                select: {
-                  name: true,
-                },
-              },
-            },
-          },
-        },
-      });
-      return announcements;
-    }
-
-    if (brand && model && color && year !== undefined) {
-      const announcements = await this.prisma.announcement.findMany({
-        skip: queryPage,
-        take: queryPerPage,
-        where: {
-          year,
-          AND: {
-            brand,
-            model,
-            color,
-          },
-        },
-        include: {
-          user: {
-            select: {
-              name: true,
-              description: true,
-              is_advertiser: true,
-            },
-          },
-          image_gallery: {
-            select: {
-              image: true,
-            },
-          },
-          comments: {
-            select: {
-              comments: true,
-              created_at: true,
-              user: {
-                select: {
-                  name: true,
-                },
-              },
-            },
-          },
-        },
-      });
-      return announcements;
-    }
-
-    if (brand && model && color && year && fuel !== undefined) {
-      const announcements = await this.prisma.announcement.findMany({
-        skip: queryPage,
-        take: queryPerPage,
-        where: { fuel },
-        include: {
-          user: {
-            select: {
-              name: true,
-              description: true,
-              is_advertiser: true,
-            },
-          },
-          image_gallery: {
-            select: {
-              image: true,
-            },
-          },
-          comments: {
-            select: {
-              comments: true,
-              created_at: true,
-              user: {
-                select: {
-                  name: true,
-                },
-              },
-            },
-          },
-        },
-      });
-      return announcements;
-    }
-
-    if (brand && model && color && year && fuel && kilometers !== undefined) {
-      const announcements = await this.prisma.announcement.findMany({
-        skip: queryPage,
-        take: queryPerPage,
-        where: { kilometers: Number(kilometers) },
-        include: {
-          user: {
-            select: {
-              name: true,
-              description: true,
-              is_advertiser: true,
-            },
-          },
-          image_gallery: {
-            select: {
-              image: true,
-            },
-          },
-          comments: {
-            select: {
-              comments: true,
-              created_at: true,
-              user: {
-                select: {
-                  name: true,
-                },
-              },
-            },
-          },
-        },
-      });
-      return announcements;
-    }
-
-    if (
-      brand &&
-      model &&
-      color &&
-      year &&
-      fuel &&
-      kilometers &&
-      price !== undefined
-    ) {
-      const announcements = await this.prisma.announcement.findMany({
-        skip: queryPage,
-        take: queryPerPage,
-        where: { price: Number(price) },
-        include: {
-          user: {
-            select: {
-              name: true,
-              description: true,
-              is_advertiser: true,
-            },
-          },
-          image_gallery: {
-            select: {
-              image: true,
-            },
-          },
-          comments: {
-            select: {
-              comments: true,
-              created_at: true,
-              user: {
-                select: {
-                  name: true,
-                },
-              },
-            },
-          },
-        },
-      });
-      return announcements;
-    }
-    const allAnnouncement = await this.prisma.announcement.findMany({
-      skip: queryPage,
-      take: queryPerPage,
-      include: {
-        user: {
-          select: {
-            name: true,
-            description: true,
-            is_advertiser: true,
-          },
-        },
-        image_gallery: {
-          select: {
-            image: true,
-          },
-        },
-        comments: {
-          select: {
-            id: true,
-            comments: true,
-            created_at: true,
-            user: {
-              select: {
-                name: true,
-              },
-            },
-          },
-        },
-      },
+    const totalCount = await this.prisma.announcement.count({
+      where: filters,
     });
 
-    if (group) {
-      const groups = this.groupdBy(allAnnouncement, group);
+    const totalPages = Math.ceil(totalCount / perPage);
 
-      return groups;
+    const result = await this.prisma.announcement.findMany({
+      skip: perPage * (page - 1),
+      take: perPage,
+      where: filters,
+    });
+
+    let prevUrl = `http://localhost:3000/announcement?page=${
+      page - 1
+    }&perPage=${perPage}`;
+
+    let nextUrl = `http://localhost:3000/announcement?page=${
+      page + 1
+    }&perPage=${perPage}`;
+
+    if (filters) {
+      const keys = Object.keys(filters).filter(
+        (key) => filters[key] !== undefined,
+      );
+      const values = keys.map((key) => `&${key}=${filters[key]}`);
+
+      prevUrl += values.join('');
+      nextUrl += values.join('');
     }
-    return allAnnouncement;
+
+    let prevPage = page > 1 ? prevUrl : null;
+
+    let nextPage = page < totalPages ? nextUrl : null;
+
+    return {
+      prevPage,
+      nextPage,
+      count: totalCount,
+      data: result,
+    };
   }
 
   async findOne(id: string): Promise<Announcement> {
@@ -417,18 +151,6 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
 
   async update(id: string, data: UpdateAnnouncementDto): Promise<Announcement> {
     const { image_gallery, ...rest } = data;
-    // const imageSearch = await this.prisma.imageGallery.findMany({
-    //   where: { announcementId: id },
-    // });
-    // console.log(imageSearch);
-
-    // const changeImage = image_gallery.map(async (imageObj) => {
-    //   const imageUpdate = await this.prisma.imageGallery.update({
-    //     where: {}
-    //     data: { ...imageObj },
-    //   });
-    // });
-
     const announcement = await this.prisma.announcement.update({
       where: { id },
       data: {
