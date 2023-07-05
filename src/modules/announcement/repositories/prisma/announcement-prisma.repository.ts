@@ -6,8 +6,6 @@ import { UpdateAnnouncementDto } from '../../dto/update-announcement.dto';
 import { Announcement } from '../../entities/announcement.entity';
 import { AnnouncementRepository } from '../announcement.repository';
 import { ImageGallery } from 'src/modules/image-gallery/entities/image-gallery.entity';
-import { PaginationParamsDto } from '../../dto/paginate-announcement.dto';
-import { filter } from 'rxjs';
 
 @Injectable()
 export class AnnouncementPrismaRepository implements AnnouncementRepository {
@@ -60,6 +58,7 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
       return acc;
     }, {});
   }
+  private orderBy(orderBy: string, field: string) {}
 
   async findAll(
     page: number,
@@ -73,6 +72,20 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
     perPage = Number(perPage) || 12;
     perPage = perPage < 1 || perPage > 12 ? 12 : perPage;
 
+    if (typeof filters.kilometers === 'string') {
+      filters['kilometers'] = Number(filters.kilometers);
+    }
+    if (typeof filters.price === 'string') {
+      filters['price'] = Number(filters.price);
+    }
+    if (typeof filters.price_fipe === 'string') {
+      filters['price_fipe'] = Number(filters.price_fipe);
+    }
+
+    const keys = Object.keys(filters).filter(
+      (key) => filters[key] !== undefined,
+    );
+
     const totalCount = await this.prisma.announcement.count({
       where: filters,
     });
@@ -83,6 +96,9 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
       skip: perPage * (page - 1),
       take: perPage,
       where: filters,
+      orderBy: {
+        model: 'asc',
+      },
     });
 
     let prevUrl = `http://localhost:3000/announcement?page=${
@@ -93,12 +109,8 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
       page + 1
     }&perPage=${perPage}`;
 
-    if (filters) {
-      const keys = Object.keys(filters).filter(
-        (key) => filters[key] !== undefined,
-      );
+    if (keys.length > 0) {
       const values = keys.map((key) => `&${key}=${filters[key]}`);
-
       prevUrl += values.join('');
       nextUrl += values.join('');
     }
