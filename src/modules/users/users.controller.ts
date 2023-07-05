@@ -56,16 +56,12 @@ export class UsersController {
 
   @HttpCode(200)
   @Post('resetPassword')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
   async sendEmailResetPassword(@Body() resetPassword: ResetPasswordDto) {
     await this.usersService.sendEmailResetPassword(resetPassword.email);
     return { message: 'Token enviado com sucesso!' };
   }
 
   @Patch('resetPassword/:token')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
   async resetPassword(
     @Param('token') token: string,
     @Body() UpdatePassword: UpdatePasswordDto,
