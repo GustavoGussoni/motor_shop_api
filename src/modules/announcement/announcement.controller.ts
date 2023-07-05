@@ -65,22 +65,19 @@ export class AnnouncementController {
     @Query('color') color: string,
     @Query('year') year: string,
     @Query('fuel') fuel: string,
-    @Query('kilometer') kilometer: string,
+    @Query('kilometers') kilometers: string,
     @Query('price') price: string,
+    @Query('price_fipe') price_fipe: string,
   ) {
-    let queryPage: number = Number(page) || 1;
-    queryPage = Number(page) <= 0 ? 1 : page;
-
-    let queryPerPage: number = Number(perPage) || 12;
-    queryPerPage = Number(perPage) < 1 || Number(perPage) > 12 ? 12 : perPage;
     const filters = {
       brand,
       model,
       color,
       year,
       fuel,
-      kilometer,
+      kilometers,
       price,
+      price_fipe,
     };
     return await this.announcementService.findAll(
       page,
