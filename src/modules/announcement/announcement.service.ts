@@ -6,43 +6,39 @@ import {
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
 import { AnnouncementRepository } from './repositories/announcement.repository';
-import { PaginationParamsDto } from './dto/paginate-announcement.dto';
 
 @Injectable()
 export class AnnouncementService {
   constructor(private announcementRepository: AnnouncementRepository) {}
-  async create(createAnnouncementDto: CreateAnnouncementDto, userId: string) {
+  async create(
+    createAnnouncementDto: CreateAnnouncementDto,
+    userId: string,
+    advertiser: boolean,
+  ) {
+    if (!advertiser) {
+      throw new UnauthorizedException('Permission has been denied');
+    }
+
     const announcement = await this.announcementRepository.create(
       createAnnouncementDto,
       userId,
+      advertiser,
     );
 
     return announcement;
   }
 
   async findAll(
-    page: PaginationParamsDto,
-    perPage: PaginationParamsDto,
+    page: number,
+    perPage: number,
     group: string | undefined,
-    brand: string | undefined,
-    model: string | undefined,
-    color: string | undefined,
-    year: string | undefined,
-    fuel: string | undefined,
-    kilometer: string | undefined,
-    price: string | undefined,
+    filters: any,
   ) {
     const announcements = await this.announcementRepository.findAll(
       page,
       perPage,
       group,
-      brand,
-      model,
-      color,
-      year,
-      fuel,
-      kilometer,
-      price,
+      filters,
     );
 
     return announcements;

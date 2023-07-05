@@ -1,5 +1,4 @@
 import { CreateAnnouncementDto } from '../dto/create-announcement.dto';
-import { PaginationParamsDto } from '../dto/paginate-announcement.dto';
 import { UpdateAnnouncementDto } from '../dto/update-announcement.dto';
 import { Announcement } from '../entities/announcement.entity';
 
@@ -7,18 +6,13 @@ export abstract class AnnouncementRepository {
   abstract create(
     data: CreateAnnouncementDto,
     userId: string,
+    advertiser: boolean,
   ): Promise<Announcement> | Announcement;
   abstract findAll(
-    page: PaginationParamsDto,
-    perPage: PaginationParamsDto,
+    page: number,
+    perPage: number,
     group: string | undefined,
-    brand: string | undefined,
-    model: string | undefined,
-    color: string | undefined,
-    year: string | undefined,
-    fuel: string | undefined,
-    kilometer: string | undefined,
-    price: string | undefined,
+    filters: any,
   ): Promise<Announcement[]> | Announcement[] | object;
   abstract findOne(id: string): Promise<Announcement> | Announcement;
   abstract update(
