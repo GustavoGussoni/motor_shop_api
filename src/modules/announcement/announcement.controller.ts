@@ -50,7 +50,55 @@ export class AnnouncementController {
   @ApiQuery({
     name: 'group',
     type: String,
-    description: 'indica a marca dos carros o qual deseja receber',
+    description: 'Utilizado para retornar em grupos',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'brand',
+    type: String,
+    description: 'Filtro por tipos de marcas',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'model',
+    type: String,
+    description: 'Filtro por modelo dos veículos',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'color',
+    type: String,
+    description: 'Filtro por cor dos veículos',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'year',
+    type: String,
+    description: 'Filtro por ano dos veículos',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'fuel',
+    type: String,
+    description: 'Filtro por tipo de combustível do veículo',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'kilometers',
+    type: String,
+    description: 'Filtro por quilometragem',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'price',
+    type: String,
+    description: 'Filtro por valor',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'price_fipe',
+    type: String,
+    description: 'Filtro por valor da tabela fipe',
     required: false,
   })
   @Get()
