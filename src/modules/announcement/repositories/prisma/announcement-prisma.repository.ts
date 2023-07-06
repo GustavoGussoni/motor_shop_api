@@ -99,6 +99,23 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
             is_advertiser: true,
           },
         },
+        comments: {
+          select: {
+            id: true,
+            comments: true,
+            created_at: true,
+            user: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+        image_gallery: {
+          select: {
+            image: true
+          }
+        }
       },
     });
 
