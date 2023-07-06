@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { UserRepository } from '../users.repository';
 import { CreateUserDto } from '../../dto/create-user.dto';
@@ -35,6 +39,7 @@ export class UsersPrismaRepository implements UserRepository {
 
     return plainToInstance(User, newUser);
   }
+
   async findByEmail(email: string): Promise<User> {
     const user = await this.prisma.user.findUnique({
       where: { email: email },
@@ -55,8 +60,8 @@ export class UsersPrismaRepository implements UserRepository {
   async findAll(): Promise<User[]> {
     const users = await this.prisma.user.findMany({
       include: {
-        address: true
-      }
+        address: true,
+      },
     });
     return users;
   }
@@ -68,15 +73,19 @@ export class UsersPrismaRepository implements UserRepository {
   async update(id: string, data: UpdateUserDto): Promise<User> {
     const { address, ...rest } = data;
 
+    const findUser = await this.prisma.user.findUnique({
+      where: { id },
+    });
+
+    if (!findUser) {
+      throw new NotFoundException('Not found');
+    }
+
     const userUpdate = await this.prisma.user.update({
       where: { id },
       data: {
         ...rest,
       },
-    });
-
-    const findUser = await this.prisma.user.findUnique({
-      where: { id },
     });
 
     const newAddress = await this.prisma.address.update({
