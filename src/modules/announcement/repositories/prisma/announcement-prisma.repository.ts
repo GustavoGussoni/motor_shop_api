@@ -52,12 +52,42 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
     return plainToInstance(Announcement, findAnnouncement);
   }
 
+  private groupdBy(announcements: Announcement[], key: string) {
+    return announcements.reduce((acc, curr) => {
+      (acc[curr[key]] = acc[curr[key]] || []).push(curr);
+      return acc;
+    }, {});
+  }
+
   async findAll(
     page: number,
     perPage: number,
     group: string,
     filters: any,
   ): Promise<object | Announcement[]> {
+    if (group) {
+      const announcements = await this.prisma.announcement.findMany({
+        include: {
+          user: {
+            select: {
+              name: true,
+              description: true,
+              is_advertiser: true,
+            },
+          },
+          image_gallery: {
+            select: {
+              image: true,
+            },
+          },
+        },
+      });
+      if (group) {
+        return this.groupdBy(announcements, group);
+      }
+      return announcements;
+    }
+
     page = Number(page) || 1;
     page = page <= 0 ? 1 : page;
 
@@ -113,9 +143,9 @@ export class AnnouncementPrismaRepository implements AnnouncementRepository {
         },
         image_gallery: {
           select: {
-            image: true
-          }
-        }
+            image: true,
+          },
+        },
       },
     });
 
