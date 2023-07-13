@@ -1,6 +1,6 @@
-import { CreateCommentsDto } from './dto/create-comments.dto';
-import { UpdateICommentsDto } from './dto/update-comments';
-import { Comments } from './entites/commensts.entity';
+import { CreateCommentsDto } from '../dto/create-comments.dto';
+import { UpdateICommentsDto } from '../dto/update-comments';
+import { Comments } from '../entites/commensts.entity';
 
 export abstract class CommentsRepository {
   abstract create(

@@ -3,7 +3,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CommentsRepository } from './comments.repository';
+import { CommentsRepository } from './repositories/comments.repository';
 import { CreateCommentsDto } from './dto/create-comments.dto';
 import { AnnouncementRepository } from '../announcement/repositories/announcement.repository';
 import { UpdateICommentsDto } from './dto/update-comments';
